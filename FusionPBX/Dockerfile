@@ -31,18 +31,44 @@ RUN \
   apt-get update && apt-get install -y supervisor
 # FusionPBX
 RUN \
-  apt-get update && apt-get install -y git \
-  && mkdir -p /var/www/fusionpbx \
-  && git clone --depth=1 https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx \
-  && mkdir -p /etc/fusionpbx \
-  && chown -R freeswitch:freeswitch /var/www/fusionpbx \
-  && chown -R freeswitch:freeswitch /etc/fusionpbx
+  apt-get update && apt-get install -y git
+## Core
+ARG FUSIONPBX_VERSION=3dec7cb307d6af5b3d17b6a868869249c5f5acb8
+WORKDIR /var/www/fusionpbx
+RUN mkdir -p /var/cache/fusionpbx /var/www/fusionpbx \
+  && git clone https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx \
+  && git checkout ${FUSIONPBX_VERSION} \
+  && mkdir -p /etc/fusionpbx
+## Apps
+RUN mkdir -p /var/www/fusionpbx/app/command \
+  && git clone https://github.com/fusionpbx/fusionpbx-app-command.git /var/www/fusionpbx/app/command
+RUN mkdir -p /var/www/fusionpbx/app/edit \
+  && git clone https://github.com/fusionpbx/fusionpbx-app-edit.git /var/www/fusionpbx/app/edit
+# Permissions
+RUN \
+  chown -R freeswitch:freeswitch /var/cache/fusionpbx && \
+  chown -R freeswitch:freeswitch /var/www/fusionpbx && \
+  chown -R freeswitch:freeswitch /etc/fusionpbx
+# Configure FreeSwitch <-> FusionPBX integration
+RUN \
+  rm -rf /etc/freeswitch && \
+  ln -sf /var/www/fusionpbx/resources/templates/conf /etc/freeswitch && \
+  rm -rf /usr/share/freeswitch/scripts && \
+  ln -sf /var/www/fusionpbx/app/scripts/resources/scripts /usr/share/freeswitch/scripts && \
+  rm -rf /usr/share/freeswitch/sounds/music/8000/* \
+  rm -rf /usr/share/freeswitch/sounds/music/16000/* \
+  rm -rf /usr/share/freeswitch/sounds/music/32000/* \
+  rm -rf /usr/share/freeswitch/sounds/music/48000/*
 # Clean
 RUN \
   apt-get clean && apt-get autoclean
 # Configs
+COPY php.ini /etc/php/7.3/conf.d/fusionpbx.ini
 COPY fpm-pool.conf /etc/php/7.3/fpm/pool.d/freeswitch.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 # Entrypoint
-ENTRYPOINT [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
+WORKDIR /var/www/fusionpbx
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh && ln -sf /usr/local/bin/entrypoint.sh /entrypoint
+ENTRYPOINT [ "/entrypoint" ]
