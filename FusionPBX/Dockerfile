@@ -33,7 +33,7 @@ RUN \
 RUN \
   apt-get update && apt-get install -y git
 ## Core
-ARG FUSIONPBX_VERSION=3dec7cb307d6af5b3d17b6a868869249c5f5acb8
+ARG FUSIONPBX_VERSION=845b3c2e607620793e9dd8f0ebef19465f7a7ba2
 WORKDIR /var/www/fusionpbx
 RUN mkdir -p /var/cache/fusionpbx /var/www/fusionpbx \
   && git clone https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx \
