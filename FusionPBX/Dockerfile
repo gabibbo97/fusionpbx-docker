@@ -1,4 +1,5 @@
-FROM debian:10
+# Seen at https://github.com/fusionpbx/fusionpbx-install.sh/commit/3a63d467fd7cf28f0c21d94a4872e5c5ebd674c7
+FROM debian:10.7
 # FreeSwitch
 ARG FREESWITCH_VERSION=1.10.5~release~17~25569c1631~buster-1~buster+1
 RUN \
@@ -33,7 +34,7 @@ RUN \
 RUN \
   apt-get update && apt-get install -y git
 ## Core
-ARG FUSIONPBX_VERSION=845b3c2e607620793e9dd8f0ebef19465f7a7ba2
+ARG FUSIONPBX_VERSION=37350b4fa7c7b08b8e70fc1923f537ccf50a0bb7
 WORKDIR /var/www/fusionpbx
 RUN mkdir -p /var/cache/fusionpbx /var/www/fusionpbx \
   && git clone https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx \
