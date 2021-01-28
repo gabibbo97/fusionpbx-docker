@@ -3,34 +3,19 @@ services:
   # DB
   adminer:
     image: adminer:4.7.8
-    ports:
-      - "8080:8080"
-    networks:
-      - db
+    network_mode: host
   db:
     image: postgres:13.1
+    network_mode: host
     environment:
       POSTGRES_DB: fusionpbx
       POSTGRES_USER: fusionpbx
       POSTGRES_PASSWORD: fusionpbx
-    networks:
-      - db
   # FusionPBX
   fusionpbx:
-    build: FusionPBX
+    image: fusionpbx:latest
+    network_mode: host
     environment:
       DB_HOST: localhost
       DB_USER: fusionpbx
       DB_PASS: fusionpbx
-    ports:
-      - 5060:5060
-      - 5060:5060/udp
-      - 5080:5080
-      - 5080:5080/udp
-      - 10000-20000:10000-20000/udp
-      - 8888:80
-    networks:
-      - db
-
-networks:
-  db: {}

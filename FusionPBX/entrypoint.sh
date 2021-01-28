@@ -2,19 +2,19 @@
 #
 # Write configuration file
 #
-cat > /etc/fusionpbx.php <<EOF
-<?php
-  $db_type = 'pgsql';
+# cat > /etc/fusionpbx.php <<EOF
+# <?php
+#   $db_type = 'pgsql';
 
-  $db_host = '${DB_HOST}';
-  $db_port = '5432';
+#   $db_host = '${DB_HOST}';
+#   $db_port = '5432';
 
-  $db_username = '${DB_USER}';
-  $db_password = '${DB_PASS}';
+#   $db_username = '${DB_USER}';
+#   $db_password = '${DB_PASS}';
 
-  ini_set('display_errors', '1');
-  error_reporting(E_ALL);
-EOF
+#   ini_set('display_errors', '1');
+#   error_reporting(E_ALL);
+# EOF
 #
 # Configure mod_xml_cdr
 #

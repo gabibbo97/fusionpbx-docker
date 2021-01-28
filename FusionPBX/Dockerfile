@@ -1,7 +1,9 @@
 # Seen at https://github.com/fusionpbx/fusionpbx-install.sh/commit/3a63d467fd7cf28f0c21d94a4872e5c5ebd674c7
-FROM debian:10.7
+ARG DEBIAN_DIGEST
+ARG DEBIAN_TAG
+FROM debian:${DEBIAN_TAG}@${DEBIAN_DIGEST}
 # FreeSwitch
-ARG FREESWITCH_VERSION=1.10.5~release~17~25569c1631~buster-1~buster+1
+ARG FREESWITCH_VERSION
 RUN \
   apt-get update \
   && apt-get install -y gnupg2 wget lsb-release \
@@ -34,7 +36,7 @@ RUN \
 RUN \
   apt-get update && apt-get install -y git
 ## Core
-ARG FUSIONPBX_VERSION=37350b4fa7c7b08b8e70fc1923f537ccf50a0bb7
+ARG FUSIONPBX_VERSION
 WORKDIR /var/www/fusionpbx
 RUN mkdir -p /var/cache/fusionpbx /var/www/fusionpbx \
   && git clone https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx \
@@ -43,8 +45,6 @@ RUN mkdir -p /var/cache/fusionpbx /var/www/fusionpbx \
 ## Apps
 RUN mkdir -p /var/www/fusionpbx/app/command \
   && git clone https://github.com/fusionpbx/fusionpbx-app-command.git /var/www/fusionpbx/app/command
-RUN mkdir -p /var/www/fusionpbx/app/edit \
-  && git clone https://github.com/fusionpbx/fusionpbx-app-edit.git /var/www/fusionpbx/app/edit
 # Permissions
 RUN \
   chown -R freeswitch:freeswitch /var/cache/fusionpbx && \
