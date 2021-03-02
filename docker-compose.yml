@@ -2,10 +2,10 @@ version: '3'
 services:
   # DB
   adminer:
-    image: adminer:4.7.8
+    image: adminer:4.8.0
     network_mode: host
   db:
-    image: postgres:13.1
+    image: postgres:13.2
     network_mode: host
     environment:
       POSTGRES_DB: fusionpbx
