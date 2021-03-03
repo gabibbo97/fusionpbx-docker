@@ -1,0 +1,20 @@
+---
+name: Build and publish image
+on:
+  push:
+    branches: [ 'master' ]
+    paths: [ 'build.sh' ]
+
+jobs:
+  build-and-publish:
+    name: Build and publish image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and publish
+      env:
+        DOCKER_REPO: ghcr.io/gabibbo97
+        DOCKER_USER: gabibbo97
+        DOCKER_PASS: ${{ secrets.GH_TOKEN }}
+      run: |
+        sh build.sh

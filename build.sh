@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 # Settings
 DEBIAN_TAG=10.8-slim
 DEBIAN_DIGEST=sha256:7f5c2603ccccb7fa4fc934bad5494ee9f47a5708ed0233f5cd9200fe616002ad
@@ -26,4 +27,9 @@ for tag in \
 do
   echo "Tagging ${tag}"
   docker tag fusionpbx:latest "fusionpbx:${tag}"
+  if [ -n "${DOCKER_REPO}" ] && [ -n "${DOCKER_USER}" ] && [ -n "${DOCKER_PASS}" ]; then
+    docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" "${DOCKER_REPO}"
+    docker tag fusionpbx:latest "${DOCKER_REPO}/fusionpbx:${tag}"
+    docker push "${DOCKER_REPO}/fusionpbx:${tag}"
+  fi
 done
