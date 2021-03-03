@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 # Settings
-DEBIAN_TAG=10.8-slim
+DEBIAN_TAG=10.8
 DEBIAN_DIGEST=sha256:7f5c2603ccccb7fa4fc934bad5494ee9f47a5708ed0233f5cd9200fe616002ad
 FREESWITCH_VERSION=1.10.5~release~17~25569c1631~buster-1~buster+1
 FREESWITCH_SHORT_VERSION=$(echo "$FREESWITCH_VERSION" | cut -d '~' -f 1)
